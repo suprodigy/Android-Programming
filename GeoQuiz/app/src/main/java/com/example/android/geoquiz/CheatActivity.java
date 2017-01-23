@@ -1,10 +1,14 @@
 package com.example.android.geoquiz;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,7 +22,9 @@ public class CheatActivity extends AppCompatActivity {
 
     private boolean mAnswerIsTrue;
     private boolean mAnswerIsShown = false;
+
     private TextView mAnswerTextView;
+    private TextView mVersionInfoTextView;
     private Button mShowAnswer;
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
@@ -52,8 +58,28 @@ public class CheatActivity extends AppCompatActivity {
                 setText();
                 mAnswerIsShown = true;
                 setAnswerShownResult(mAnswerIsShown);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int cx = mShowAnswer.getWidth() / 2;
+                    int cy = mShowAnswer.getHeight() / 2;
+                    float radius = mShowAnswer.getWidth();
+                    Animator anim = ViewAnimationUtils.createCircularReveal(mShowAnswer, cx, cy, radius, 0);
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mShowAnswer.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    anim.start();
+                } else {
+                    mShowAnswer.setVisibility(View.INVISIBLE);
+                }
             }
         });
+
+        mVersionInfoTextView = (TextView) findViewById(R.id.version_info);
+        mVersionInfoTextView.setText("API Level " + Build.VERSION.SDK_INT);
     }
 
     private void setAnswerShownResult(boolean isAnswerShown) {
