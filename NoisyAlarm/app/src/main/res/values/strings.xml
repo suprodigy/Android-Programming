@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">NoisyAlarm</string>
+    <string name="add_alarm_menu">알람 추가</string>
+    <string name="alarm_detail_title">알람 편집</string>
+    <string name="alarm_add_title">새로운 알람</string>
+
+    <string name="sunday">일</string>
+    <string name="monday">월</string>
+    <string name="tuesday">화</string>
+    <string name="wednesday">수</string>
+    <string name="thursday">목</string>
+    <string name="friday">금</string>
+    <string name="saturday">토</string>
+
+    <string name="save_button">저장</string>
+    <string name="delete_button">삭제</string>
+    <string name="update_button">수정</string>
+    <string name="cancel_button">취소</string>
+
+    <string name="alarm_setting_title">시간을 설정하세요.</string>
+    <string name="alarm_content_title">알람 메시지를 입력하세요.</string>
+    <string name="alarm_edit_text_hint">오른쪽 버튼을 누르세요.</string>
+
+    <string name="time_am">오전</string>
+    <string name="time_pm">오후</string>
+
+    <string name="alarm_notify_title">Noisy Alarm</string>
+    <string name="alarm_notify_content">알람입니다!</string>
+    <string name="alarm_pause">중지</string>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.boostcamp.jr.noisyalarm">
+
+    <!-- Permission 설정 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/alarm_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Activity 정의 -->
+        <activity android:name=".AlarmListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AlarmDetailActivity"
+            android:parentActivityName=".AlarmListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AlarmListActivity"/>
+        </activity>
+
+        <activity
+            android:name=".AlarmAddActivity"
+            android:parentActivityName=".AlarmListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AlarmListActivity"/>
+        </activity>
+
+        <activity android:name=".AlarmService.AlarmServiceActivity"/>
+
+        <!-- Content Provider 정의 -->
+        <provider
+            android:name=".Model.AlarmProvider"
+            android:authorities="com.boostcamp.jr.noisyalarm"
+            android:exported="false"/>
+
+        <!-- Broadcast Receiver 정의 -->
+        <receiver android:name=".Receiver.AlarmReceiver"/>
+
+        <receiver
+            android:name=".Receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
