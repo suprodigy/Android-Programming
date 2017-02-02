@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@color/colorPrimaryLight"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@string/alarm_setting_title"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
+            style="?android:listSeparatorTextViewStyle"
+            android:paddingTop="@dimen/content_vertical_padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TimePicker
+            android:id="@+id/timepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_below="@id/layout1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ToggleButton
+            android:id="@+id/sunday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/sunday"
+            android:textOn="@string/sunday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+        <ToggleButton
+            android:id="@+id/monday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/monday"
+            android:textOn="@string/monday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+        <ToggleButton
+            android:id="@+id/tuesday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/tuesday"
+            android:textOn="@string/tuesday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+        <ToggleButton
+            android:id="@+id/wednesday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/wednesday"
+            android:textOn="@string/wednesday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+        <ToggleButton
+            android:id="@+id/thursday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/thursday"
+            android:textOn="@string/thursday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+        <ToggleButton
+            android:id="@+id/friday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/friday"
+            android:textOn="@string/friday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+        <ToggleButton
+            android:id="@+id/saturday"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/content_small_margin"
+            android:layout_marginLeft="@dimen/content_small_margin"
+            android:layout_marginRight="@dimen/content_small_margin"
+            android:layout_marginStart="@dimen/content_small_margin"
+            android:checked="false"
+            android:textOff="@string/saturday"
+            android:textOn="@string/saturday"
+            android:background="@drawable/day_of_week_button"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout3"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/update_button"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/update_button"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/delete_button"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/delete_button"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:layout_below="@id/layout2"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/alarm_content_title"
+            android:textColor="@color/colorBlack"
+            style="?android:listSeparatorTextViewStyle"
+            android:paddingTop="@dimen/content_vertical_padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/content_space_margin"/>
+
+        <EditText
+            android:id="@+id/alarm_content_edit_text"
+            android:ems="20"
+            android:inputType="text"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:hint="@string/alarm_content_title"
+            android:textColorHint="@color/colorGray"
+            android:layout_marginBottom="@dimen/content_space_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
