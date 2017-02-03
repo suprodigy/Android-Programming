@@ -9,4 +9,5 @@
     <string name="show_subtitle">서브타이틀 보기</string>
     <string name="hide_subtitle">서브타이틀 감추기</string>
     <string name="subtitle_format">%1$s 건</string>
+    <string name="delete_crime">범죄 삭제</string>
 </resources>

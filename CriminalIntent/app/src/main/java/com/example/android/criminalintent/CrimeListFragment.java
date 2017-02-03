@@ -97,7 +97,7 @@ public class CrimeListFragment extends Fragment {
     private void updateSubtitle() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         int crimeCount = crimeLab.getCrimes().size();
-        String subtitle = getString(R.string.subtitle_format, crimeCount);
+        String subtitle = getString(R.string.subtitle_format, Integer.toString(crimeCount));
 
         if (!mSubtitleVisible) {
             subtitle = null;
@@ -122,7 +122,8 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyItemChanged(mClickPosition);
+            mAdapter.setCrimes(crimes);
+            mAdapter.notifyDataSetChanged();
         }
 
         updateSubtitle();
@@ -152,6 +153,10 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
+        }
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder
@@ -174,7 +179,7 @@ public class CrimeListFragment extends Fragment {
         public void bindCrime(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(new DateFormat().format("EEEE, MMM d, yyyy", mCrime.getDate()));
+            mDateTextView.setText(DateFormat.format("EEEE, MMM d, yyyy", mCrime.getDate()));
             mSolvedCheckBox.setChecked(mCrime.isSolved());
         }
 
