@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
@@ -11,20 +11,7 @@
         <item name="buttonStyle">@style/BeatBoxButton</item>
     </style>
 
-    <style name="BeatBoxButton" parent="android:style/Widget.Holo.Button">
+    <style name="BeatBoxButton" parent="android:style/Widget.Material.Button">
         <item name="android:background">@color/dark_blue</item>
     </style>
-
-<!--
-    <style name="BeatBoxButton.Strong">
-        <item name="android:textStyle">bold</item>
-    </style>
--->
-
-    <!--
-    <style name="StrongBeatBoxButton" parent="@style/BeatBoxButton">
-        <item name="android:textStyle">bold</item>
-    </style>
-    -->
-
 </resources>
