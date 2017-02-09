@@ -4,11 +4,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.android.thinktank.Model.ThinkFactory;
+import com.example.android.thinktank.Model.ThinkItem;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
@@ -22,6 +27,10 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class TTDetailActivity extends AppCompatActivity {
+
+    private static final String TAG = "TTDetailActivity";
+
+    private ThinkItem mThinkItem;
 
     @BindView(R.id.activity_tt_detail)
     View mLayout;
@@ -47,17 +56,101 @@ public class TTDetailActivity extends AppCompatActivity {
         DesignSpec background = DesignSpec.fromResource(mLayout, R.raw.background);
         mLayout.getOverlay().add(background);
 
-        String keywords = getIntent().getStringExtra("keyword");
-        String content = getIntent().getStringExtra("content");
+        int position = getIntent().getIntExtra("position", -1);
+        setView(position);
 
-        String[] keywordsList = keywords.split(" ");
-        for(int i=0; i<keywordsList.length; i++) {
-            mKeywords.get(i).setText(keywordsList[i]);
-        }
-
-        mContent.setText(content);
+        setEventListener();
 
         setBoomButton();
+    }
+
+    private void setView(int position) {
+        ThinkItem passedItem = ThinkFactory.get().selectAll().get(position);
+        Log.d(TAG, "" + passedItem.getId());
+
+        mThinkItem = new ThinkItem();
+        mThinkItem.setId(passedItem.getId());
+        mThinkItem.setContent(passedItem.getContent());
+        mThinkItem.setKeywords(passedItem.getKeywords());
+
+        /*
+        RealmList<KeywordItem> keywordsList = mThinkItem.getKeywords();
+        for(int i=0; i<keywordsList.size(); i++) {
+            mKeywords.get(i).setText("#" + keywordsList.get(i).getName());
+        }
+        */
+
+        String[] keywords = mThinkItem.getKeywords().split(" ");
+        for(int i=0; i<keywords.length; i++) {
+            mKeywords.get(i).setText(keywords[i]);
+        }
+
+        mContent.setText(mThinkItem.getContent());
+    }
+
+    private void setEventListener() {
+
+        /*
+        for(int i=0; i<mKeywords.size(); i++) {
+            final int idx = i;
+            mKeywords.get(i).addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mThinkItem.getKeywords().get(idx).setName(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        }
+        */
+
+        for(int i=0; i<mKeywords.size(); i++) {
+            mKeywords.get(i).addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String keywords = "";
+                    for(int j=0; j<mKeywords.size(); j++) {
+                        String keyword = mKeywords.get(j).getText().toString();
+                        if (keyword.length() != 0) {
+                            if(keyword.charAt(0) != '#')
+                                keywords += "#" + keyword + " ";
+                            else
+                                keywords += keyword + " ";
+                        }
+                    }
+                    mThinkItem.setKeywords(keywords);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        }
+
+        mContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mThinkItem.setContent(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ThinkFactory.get().update(mThinkItem);
     }
 
     private void setBoomButton() {
@@ -92,7 +185,9 @@ public class TTDetailActivity extends AppCompatActivity {
                     @Override
                     public void onBoomButtonClick(int index) {
                         // 메모 삭제 버튼 클릭 시
+                        ThinkFactory.get().delete(mThinkItem);
                         Toast.makeText(getApplicationContext(), "삭제 버튼 클릭", Toast.LENGTH_LONG).show();
+                        onBackPressed();
                     }
                 })
         );

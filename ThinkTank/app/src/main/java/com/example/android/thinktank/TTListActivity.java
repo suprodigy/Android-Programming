@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.lucasr.dspec.DesignSpec;
+import com.example.android.thinktank.Model.ThinkFactory;
+import com.example.android.thinktank.Model.ThinkItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.lucasr.dspec.DesignSpec;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmRecyclerViewAdapter;
 
 public class TTListActivity extends AppCompatActivity {
+
+    private TTAdapter mAdapter;
 
     @BindView(R.id.think_list_recycler_view)
     RecyclerView mRecyclerView;
@@ -38,16 +44,53 @@ public class TTListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tt_list);
 
         ButterKnife.bind(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(new TTAdapter(this));
-        mRecyclerView.requestFocus();
+        setRecyclerView();
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setSwipeEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("", "!!!!!!!!!!!!!!!!");
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void setRecyclerView() {
+        mAdapter = new TTAdapter(this, ThinkFactory.get().selectAll());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.requestFocus();
+    }
+
+    // swipe event 등록: 이벤트 발생 시 해당 position의 Memo Data 삭제
+    private void setSwipeEvent() {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                ThinkItem swipedItem = mAdapter.getData().get(position);
+
+                // 삭제 기능 구현
+                ThinkFactory.get().delete(swipedItem);
+            }
+        }).attachToRecyclerView(mRecyclerView);
     }
 
     public class TTHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
+
+        private ThinkItem mThinkItem;
 
         @BindView(R.id.list_item_keywords)
         TextView mKeywords;
@@ -68,34 +111,46 @@ public class TTListActivity extends AppCompatActivity {
             mBackground.getOverlay().add(background);
         }
 
-        public void bindThinkItem(String keywords, String content) {
+        public void bindThinkItem(ThinkItem item) {
+            mThinkItem = item;
+            /*
+            String keywords = "";
+            for(KeywordItem keyword : item.getKeywords()) {
+                keywords += "#" + keyword.getName() + " ";
+            }
             mKeywords.setText(keywords);
-            mContent.setText(content);
+            */
+            mKeywords.setText(item.getKeywords());
+            mContent.setText(item.getContent());
         }
 
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getApplicationContext(), TTDetailActivity.class);
-            intent.putExtra("keyword", mKeywords.getText());
-            intent.putExtra("content", mContent.getText());
+            intent.putExtra("position", getAdapterPosition());
             startActivity(intent);
         }
     }
 
-    private class TTAdapter extends RecyclerView.Adapter<TTHolder> {
+    private class TTAdapter extends RealmRecyclerViewAdapter<ThinkItem, TTHolder> {
 
         private Context mContext;
+        /*
         List<String> mKeywordList;
         List<String> mContentList;
+        */
 
-        public TTAdapter(Context context) {
+        public TTAdapter(Context context, OrderedRealmCollection<ThinkItem> data) {
+            super(context, data, true);
             mContext = context;
+            /*
             mKeywordList = new ArrayList<>();
             mContentList = new ArrayList<>();
             for(int i=0; i<100; i++) {
                 mKeywordList.add("#헌법 #국회의원");
                 mContentList.add(getString(R.string.korean_lorem_ipsum));
             }
+            */
         }
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -108,12 +163,8 @@ public class TTListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(TTHolder holder, int position) {
-            holder.bindThinkItem(mKeywordList.get(position), mContentList.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mKeywordList.size();
+            ThinkItem item = getData().get(position);
+            holder.bindThinkItem(item);
         }
 
     }

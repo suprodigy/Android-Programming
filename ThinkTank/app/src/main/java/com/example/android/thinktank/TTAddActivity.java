@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.android.thinktank.Model.ThinkFactory;
+import com.example.android.thinktank.Model.ThinkItem;
+
 import org.lucasr.dspec.DesignSpec;
 
 import java.util.List;
@@ -21,7 +24,7 @@ public class TTAddActivity extends AppCompatActivity {
     View mLayout;
 
     @BindViews({R.id.keyword1, R.id.keyword2, R.id.keyword3})
-    List<EditText> keywords;
+    List<EditText> mKeywords;
 
     @BindView(R.id.think_content)
     EditText mContent;
@@ -35,8 +38,40 @@ public class TTAddActivity extends AppCompatActivity {
 
         DesignSpec background = DesignSpec.fromResource(mLayout, R.raw.background);
         mLayout.getOverlay().add(background);
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        /*
+        RealmList<KeywordItem> keywordItems = new RealmList<>();
+        for(int i=0; i<mKeywords.size(); i++) {
+            String keyword = mKeywords.get(i).getText().toString();
+            if (keyword.length() != 0) {
+                keywordItems.add(new KeywordItem().setName(keyword));
+            }
+        }
+
+        ThinkFactory.get().insert(new ThinkItem()
+                        .setContent(mContent.getText().toString())
+                        .setKeywords(keywordItems));
+        */
+
+        String keywords = "";
+        for(int i=0; i<mKeywords.size(); i++) {
+            String keyword = mKeywords.get(i).getText().toString();
+            if (keyword.length() != 0) {
+                if (keyword.charAt(0) != '#')
+                    keywords += "#" + keyword + " ";
+                else
+                    keywords += keyword + " ";
+            }
+        }
+
+        ThinkFactory.get().insert(new ThinkItem()
+                .setContent(mContent.getText().toString())
+                .setKeywords(keywords));
     }
 
 }

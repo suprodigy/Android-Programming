@@ -3,8 +3,9 @@
           package="com.example.android.thinktank">
 
     <application
+        android:name=".TTApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
