@@ -16,4 +16,9 @@
     <string name="keyword_hint3">#키워드3</string>
     <string name="content_hint">메모를 입력하세요.</string>
 
+    <!-- TTDetailActivity -->
+    <string name="image_menu">사진 추가</string>
+    <string name="share_menu">메모 공유</string>
+    <string name="delete_menu">메모 삭제</string>
+
 </resources>

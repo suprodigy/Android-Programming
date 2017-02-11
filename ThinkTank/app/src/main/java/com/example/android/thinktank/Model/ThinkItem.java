@@ -1,4 +1,4 @@
-package com.example.android.thinktank.Model;
+package com.example.android.thinktank.model;
 
 import java.util.UUID;
 
@@ -29,8 +29,9 @@ public class ThinkItem extends RealmObject {
         return id;
     }
 
-    public void setId(String id) {
+    public ThinkItem setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getContent() {

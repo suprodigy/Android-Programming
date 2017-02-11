@@ -10,13 +10,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.android.thinktank.Model.ThinkFactory;
-import com.example.android.thinktank.Model.ThinkItem;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
-import com.nightonke.boommenu.BoomMenuButton;
+import com.example.android.thinktank.model.ThinkItem;
+import com.example.android.thinktank.model.ThinkObserver;
 
 import org.lucasr.dspec.DesignSpec;
 
@@ -25,24 +21,41 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class TTDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "TTDetailActivity";
 
     private ThinkItem mThinkItem;
+    private boolean mDeleted;
 
     @BindView(R.id.activity_tt_detail)
     View mLayout;
-
-    @BindView(R.id.bmb)
-    BoomMenuButton mMenuButton;
 
     @BindViews({R.id.keyword1, R.id.keyword2, R.id.keyword3})
     List<EditText> mKeywords;
 
     @BindView(R.id.think_content)
     EditText mContent;
+
+    @OnClick(R.id.image_button)
+    void onImageButtonClicked() {
+
+    }
+
+    @OnClick(R.id.share_button)
+    void onShareButtonClicked() {
+
+    }
+
+    @OnClick(R.id.delete_button)
+    void onDeleteButtonClicked() {
+        Log.d("onDelete()", "" + mThinkItem.getId());
+        ThinkObserver.get().delete(mThinkItem);
+        mDeleted = true;
+        finish();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -56,23 +69,20 @@ public class TTDetailActivity extends AppCompatActivity {
         DesignSpec background = DesignSpec.fromResource(mLayout, R.raw.background);
         mLayout.getOverlay().add(background);
 
-        int position = getIntent().getIntExtra("position", -1);
-        setView(position);
+        getThinkItem();
+        setView();
 
         setEventListener();
-
-        setBoomButton();
     }
 
-    private void setView(int position) {
-        ThinkItem passedItem = ThinkFactory.get().selectAll().get(position);
-        Log.d(TAG, "" + passedItem.getId());
+    private void getThinkItem() {
+        mDeleted = false;
+        int position = getIntent().getIntExtra("position", -1);
+        ThinkItem passedItem = ThinkObserver.get().selectAll().get(position);
+        mThinkItem = ThinkObserver.get().getCopiedObject(passedItem);
+    }
 
-        mThinkItem = new ThinkItem();
-        mThinkItem.setId(passedItem.getId());
-        mThinkItem.setContent(passedItem.getContent());
-        mThinkItem.setKeywords(passedItem.getKeywords());
-
+    private void setView() {
         /*
         RealmList<KeywordItem> keywordsList = mThinkItem.getKeywords();
         for(int i=0; i<keywordsList.size(); i++) {
@@ -150,48 +160,11 @@ public class TTDetailActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        ThinkFactory.get().update(mThinkItem);
+        if (!mDeleted) {
+            ThinkObserver.get().update(mThinkItem);
+        }
     }
 
-    private void setBoomButton() {
-        mMenuButton.addBuilder(new SimpleCircleButton.Builder()
-                .normalImageRes(R.drawable.ic_add_image)
-                .normalColorRes(R.color.red)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        // 이미지 추가 버튼 클릭 시
-                        Toast.makeText(getApplicationContext(), "이미지 버튼 클릭", Toast.LENGTH_LONG).show();
-                    }
-                })
-        );
-
-        mMenuButton.addBuilder(new SimpleCircleButton.Builder()
-                .normalImageRes(R.drawable.ic_think_share)
-                .normalColorRes(R.color.blue)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        // 공유 버큰 클릭 시
-                        Toast.makeText(getApplicationContext(), "공유 버튼 클릭", Toast.LENGTH_LONG).show();
-                    }
-                })
-        );
-
-        mMenuButton.addBuilder(new SimpleCircleButton.Builder()
-                .normalImageRes(R.drawable.ic_delete_think)
-                .normalColorRes(R.color.green)
-                .listener(new OnBMClickListener() {
-                    @Override
-                    public void onBoomButtonClick(int index) {
-                        // 메모 삭제 버튼 클릭 시
-                        ThinkFactory.get().delete(mThinkItem);
-                        Toast.makeText(getApplicationContext(), "삭제 버튼 클릭", Toast.LENGTH_LONG).show();
-                        onBackPressed();
-                    }
-                })
-        );
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

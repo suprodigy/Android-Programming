@@ -14,15 +14,46 @@
 
     <include layout="@layout/add_detail_layout"/>
 
-    <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/bmb"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        app:bmb_buttonEnum="simpleCircle"
-        app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_3_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:menu_labels_style="@style/MenuLabelsStyle"
+        app:menu_labels_showAnimation="@anim/show_from_bottom"
+        app:menu_labels_hideAnimation="@anim/hide_to_bottom"
+        app:menu_animationDelayPerItem="0"
+        app:menu_shadowColor="@color/colorPrimaryDark"
+        app:menu_colorNormal="@color/colorPrimary"
+        app:menu_colorPressed="@color/colorPrimaryDark"
+        app:menu_colorRipple="@color/colorAccent">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_image"
+            app:fab_label="@string/image_menu"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_think_share"
+            app:fab_label="@string/share_menu"
+            style="@style/MenuButtonsStyle" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_think"
+            app:fab_label="@string/delete_menu"
+            style="@style/MenuButtonsStyle" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </RelativeLayout>

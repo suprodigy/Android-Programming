@@ -1,4 +1,4 @@
-package com.example.android.thinktank.Model;
+package com.example.android.thinktank.model;
 
 import java.util.UUID;
 

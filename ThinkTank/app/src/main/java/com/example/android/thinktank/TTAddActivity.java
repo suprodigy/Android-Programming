@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.android.thinktank.Model.ThinkFactory;
-import com.example.android.thinktank.Model.ThinkItem;
+import com.example.android.thinktank.model.ThinkItem;
+import com.example.android.thinktank.model.ThinkObserver;
 
 import org.lucasr.dspec.DesignSpec;
 
@@ -44,20 +44,6 @@ public class TTAddActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        /*
-        RealmList<KeywordItem> keywordItems = new RealmList<>();
-        for(int i=0; i<mKeywords.size(); i++) {
-            String keyword = mKeywords.get(i).getText().toString();
-            if (keyword.length() != 0) {
-                keywordItems.add(new KeywordItem().setName(keyword));
-            }
-        }
-
-        ThinkFactory.get().insert(new ThinkItem()
-                        .setContent(mContent.getText().toString())
-                        .setKeywords(keywordItems));
-        */
-
         String keywords = "";
         for(int i=0; i<mKeywords.size(); i++) {
             String keyword = mKeywords.get(i).getText().toString();
@@ -69,9 +55,13 @@ public class TTAddActivity extends AppCompatActivity {
             }
         }
 
-        ThinkFactory.get().insert(new ThinkItem()
+        ThinkObserver.get().insert(new ThinkItem()
                 .setContent(mContent.getText().toString())
                 .setKeywords(keywords));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

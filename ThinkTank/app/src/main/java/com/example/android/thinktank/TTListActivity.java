@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.thinktank.Model.ThinkFactory;
-import com.example.android.thinktank.Model.ThinkItem;
+import com.example.android.thinktank.model.ThinkItem;
+import com.example.android.thinktank.model.ThinkObserver;
 
 import org.lucasr.dspec.DesignSpec;
 
@@ -42,8 +41,8 @@ public class TTListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tt_list);
-
         ButterKnife.bind(this);
+
         setRecyclerView();
 
         setSupportActionBar(mToolbar);
@@ -52,16 +51,9 @@ public class TTListActivity extends AppCompatActivity {
         setSwipeEvent();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("", "!!!!!!!!!!!!!!!!");
-        mAdapter.notifyDataSetChanged();
-    }
-
     private void setRecyclerView() {
-        mAdapter = new TTAdapter(this, ThinkFactory.get().selectAll());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new TTAdapter(this, ThinkObserver.get().selectAll());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.requestFocus();
@@ -80,9 +72,7 @@ public class TTListActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 ThinkItem swipedItem = mAdapter.getData().get(position);
-
-                // 삭제 기능 구현
-                ThinkFactory.get().delete(swipedItem);
+                ThinkObserver.get().delete(swipedItem);
             }
         }).attachToRecyclerView(mRecyclerView);
     }
@@ -132,25 +122,13 @@ public class TTListActivity extends AppCompatActivity {
         }
     }
 
-    private class TTAdapter extends RealmRecyclerViewAdapter<ThinkItem, TTHolder> {
+    public class TTAdapter extends RealmRecyclerViewAdapter<ThinkItem, TTHolder> {
 
         private Context mContext;
-        /*
-        List<String> mKeywordList;
-        List<String> mContentList;
-        */
 
         public TTAdapter(Context context, OrderedRealmCollection<ThinkItem> data) {
             super(context, data, true);
             mContext = context;
-            /*
-            mKeywordList = new ArrayList<>();
-            mContentList = new ArrayList<>();
-            for(int i=0; i<100; i++) {
-                mKeywordList.add("#헌법 #국회의원");
-                mContentList.add(getString(R.string.korean_lorem_ipsum));
-            }
-            */
         }
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -166,7 +144,6 @@ public class TTListActivity extends AppCompatActivity {
             ThinkItem item = getData().get(position);
             holder.bindThinkItem(item);
         }
-
     }
 
     @Override
