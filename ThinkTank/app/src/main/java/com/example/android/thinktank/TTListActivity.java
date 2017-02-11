@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.thinktank.model.KeywordItem;
 import com.example.android.thinktank.model.ThinkItem;
 import com.example.android.thinktank.model.ThinkObserver;
 
@@ -103,14 +104,13 @@ public class TTListActivity extends AppCompatActivity {
 
         public void bindThinkItem(ThinkItem item) {
             mThinkItem = item;
-            /*
+
             String keywords = "";
             for(KeywordItem keyword : item.getKeywords()) {
                 keywords += "#" + keyword.getName() + " ";
             }
             mKeywords.setText(keywords);
-            */
-            mKeywords.setText(item.getKeywords());
+
             mContent.setText(item.getContent());
         }
 

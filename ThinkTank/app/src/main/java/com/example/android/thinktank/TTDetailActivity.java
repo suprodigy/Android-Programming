@@ -11,17 +11,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.android.thinktank.manager.KeywordManager;
+import com.example.android.thinktank.model.KeywordItem;
+import com.example.android.thinktank.model.KeywordObserver;
 import com.example.android.thinktank.model.ThinkItem;
 import com.example.android.thinktank.model.ThinkObserver;
 
 import org.lucasr.dspec.DesignSpec;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.RealmList;
 
 public class TTDetailActivity extends AppCompatActivity {
 
@@ -29,6 +34,7 @@ public class TTDetailActivity extends AppCompatActivity {
 
     private ThinkItem mThinkItem;
     private boolean mDeleted;
+    private List<String> mKeywordsInItem = new ArrayList<>();
 
     @BindView(R.id.activity_tt_detail)
     View mLayout;
@@ -64,7 +70,12 @@ public class TTDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tt_detail);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e(TAG, "No action bar in " + TAG);
+            e.printStackTrace();
+        }
 
         DesignSpec background = DesignSpec.fromResource(mLayout, R.raw.background);
         mLayout.getOverlay().add(background);
@@ -80,43 +91,24 @@ public class TTDetailActivity extends AppCompatActivity {
         int position = getIntent().getIntExtra("position", -1);
         ThinkItem passedItem = ThinkObserver.get().selectAll().get(position);
         mThinkItem = ThinkObserver.get().getCopiedObject(passedItem);
+        RealmList<KeywordItem> keywordsList = mThinkItem.getKeywords();
+        for(int i=0; i<keywordsList.size(); i++) {
+            String temp = "#" + keywordsList.get(i).getName();
+            mKeywordsInItem.add(temp);
+        }
     }
 
     private void setView() {
-        /*
-        RealmList<KeywordItem> keywordsList = mThinkItem.getKeywords();
-        for(int i=0; i<keywordsList.size(); i++) {
-            mKeywords.get(i).setText("#" + keywordsList.get(i).getName());
-        }
-        */
-
-        String[] keywords = mThinkItem.getKeywords().split(" ");
-        for(int i=0; i<keywords.length; i++) {
-            mKeywords.get(i).setText(keywords[i]);
+        RealmList<KeywordItem> keywords = mThinkItem.getKeywords();
+        for(int i=0; i<keywords.size(); i++) {
+            String temp = "#" + keywords.get(i).getName();
+            mKeywords.get(i).setText(temp);
         }
 
         mContent.setText(mThinkItem.getContent());
     }
 
     private void setEventListener() {
-
-        /*
-        for(int i=0; i<mKeywords.size(); i++) {
-            final int idx = i;
-            mKeywords.get(i).addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mThinkItem.getKeywords().get(idx).setName(s.toString());
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {}
-            });
-        }
-        */
 
         for(int i=0; i<mKeywords.size(); i++) {
             mKeywords.get(i).addTextChangedListener(new TextWatcher() {
@@ -129,13 +121,12 @@ public class TTDetailActivity extends AppCompatActivity {
                     for(int j=0; j<mKeywords.size(); j++) {
                         String keyword = mKeywords.get(j).getText().toString();
                         if (keyword.length() != 0) {
-                            if(keyword.charAt(0) != '#')
+                            if(keyword.charAt(0) != '#') {
                                 keywords += "#" + keyword + " ";
-                            else
-                                keywords += keyword + " ";
+                                mKeywordsInItem.add(keywords);
+                            }
                         }
                     }
-                    mThinkItem.setKeywords(keywords);
                 }
 
                 @Override
@@ -161,6 +152,12 @@ public class TTDetailActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (!mDeleted) {
+            RealmList<KeywordItem> keywords = new RealmList<>();
+            for(String keyword : mKeywordsInItem) {
+                KeywordManager.get().createOrUpdateKeyword(keyword);
+                keywords.add(KeywordObserver.get().getKeywordByName(keyword));
+            }
+            mThinkItem.setKeywords(keywords);
             ThinkObserver.get().update(mThinkItem);
         }
     }

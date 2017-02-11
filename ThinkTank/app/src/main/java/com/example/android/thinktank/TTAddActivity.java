@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.android.thinktank.manager.KeywordManager;
+import com.example.android.thinktank.model.KeywordItem;
+import com.example.android.thinktank.model.KeywordObserver;
 import com.example.android.thinktank.model.ThinkItem;
 import com.example.android.thinktank.model.ThinkObserver;
 
@@ -17,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import io.realm.RealmList;
 
 public class TTAddActivity extends AppCompatActivity {
 
@@ -44,14 +48,15 @@ public class TTAddActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        String keywords = "";
+        RealmList<KeywordItem> keywords = new RealmList<>();
         for(int i=0; i<mKeywords.size(); i++) {
             String keyword = mKeywords.get(i).getText().toString();
             if (keyword.length() != 0) {
-                if (keyword.charAt(0) != '#')
-                    keywords += "#" + keyword + " ";
-                else
-                    keywords += keyword + " ";
+                if (keyword.charAt(0) != '#') {
+                    KeywordManager.get().createOrUpdateKeyword(keyword);
+                    KeywordItem item = KeywordObserver.get().getKeywordByName(keyword);
+                    keywords.add(item);
+                }
             }
         }
 

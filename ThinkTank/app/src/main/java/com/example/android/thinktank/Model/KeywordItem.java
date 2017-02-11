@@ -1,7 +1,5 @@
 package com.example.android.thinktank.model;
 
-import java.util.UUID;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -12,20 +10,20 @@ import io.realm.annotations.PrimaryKey;
 public class KeywordItem extends RealmObject {
 
     @PrimaryKey
-    private String id;
+    private int id;
     private String name;
-
-    // 다른 Keyword와의 관계를 나타내는 필드 추가
+    private int count;
+    private byte[] relation;        // 해당 비트를 id로 가지고 있는 키워드들과 연결되어 있는지를 0, 1로 표현
 
     public KeywordItem() {
-        this(UUID.randomUUID());
+        this(KeywordObserver.get().getKeyId());
     }
 
-    private KeywordItem(UUID id) {
-        this.id = id.toString();
+    private KeywordItem(int id) {
+        this.id = id;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -35,6 +33,24 @@ public class KeywordItem extends RealmObject {
 
     public KeywordItem setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public KeywordItem setCount(int count) {
+        this.count = count;
+        return this;
+    }
+
+    public byte[] getRelation() {
+        return relation;
+    }
+
+    public KeywordItem setRelation(byte[] relation) {
+        this.relation = relation;
         return this;
     }
 

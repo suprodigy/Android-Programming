@@ -2,6 +2,8 @@ package com.example.android.thinktank.model;
 
 import android.util.Log;
 
+import com.example.android.thinktank.manager.KeywordManager;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 
@@ -37,15 +39,19 @@ public class ThinkObserver {
                         .setKeywords(item.getKeywords());
             }
         });
+
+        KeywordManager.get().updateKeywordRelation(item);
     }
 
-    public void update(final ThinkItem thinkItem) {
+    public void update(final ThinkItem item) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(thinkItem);
+                realm.copyToRealmOrUpdate(item);
             }
         });
+
+        KeywordManager.get().updateKeywordRelation(item);
     }
 
     public void delete(ThinkItem item) {
@@ -58,7 +64,6 @@ public class ThinkObserver {
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    //mRealm.where(ThinkItem.class).equalTo("id",)
                     ItemToDelete.deleteFromRealm();
                 }
             });

@@ -2,6 +2,7 @@ package com.example.android.thinktank.model;
 
 import java.util.UUID;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -14,8 +15,7 @@ public class ThinkItem extends RealmObject {
     @PrimaryKey
     private String id;
     private String content;
-    // private RealmList<KeywordItem> keywords;
-    private String keywords;
+    private RealmList<KeywordItem> keywords;
 
     public ThinkItem() {
         this(UUID.randomUUID());
@@ -29,11 +29,6 @@ public class ThinkItem extends RealmObject {
         return id;
     }
 
-    public ThinkItem setId(String id) {
-        this.id = id;
-        return this;
-    }
-
     public String getContent() {
         return content;
     }
@@ -43,7 +38,6 @@ public class ThinkItem extends RealmObject {
         return this;
     }
 
-    /*
     public RealmList<KeywordItem> getKeywords() {
         return keywords;
     }
@@ -52,14 +46,5 @@ public class ThinkItem extends RealmObject {
         this.keywords = keywords;
         return this;
     }
-    */
 
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public ThinkItem setKeywords(String keywords) {
-        this.keywords = keywords;
-        return this;
-    }
 }
