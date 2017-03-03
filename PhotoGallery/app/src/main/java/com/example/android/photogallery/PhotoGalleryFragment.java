@@ -163,7 +163,7 @@ public class PhotoGalleryFragment extends VisibleFragment {
             implements View.OnClickListener {
 
         private ImageView mItemImageView;
-        private String mImageUrl;
+        private GalleryItem mGalleryItem;
 
         public PhotoHolder(View itemView) {
             super(itemView);
@@ -176,7 +176,7 @@ public class PhotoGalleryFragment extends VisibleFragment {
         }
 
         public void bindGalleryItem(GalleryItem galleryItem) {
-            mImageUrl = galleryItem.getUrl();
+            mGalleryItem = galleryItem;
 
             Picasso.with(getActivity())
                     .load(galleryItem.getUrl())
@@ -186,9 +186,9 @@ public class PhotoGalleryFragment extends VisibleFragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
-            intent.putExtra("url", mImageUrl);
-            startActivity(intent);
+//            Intent i = new Intent(Intent.ACTION_VIEW, mGalleryItem.getPhotoPageUri());
+            Intent i = PhotoPageActivity.newIntent(getActivity(), mGalleryItem.getPhotoPageUri());
+            startActivity(i);
         }
     }
 
